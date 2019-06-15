@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%=render "view_admin/elements/header" %>
+
+
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+    <!-- Main Header -->
+    <header class="main-header">
+      <!-- Logo -->
+      <a href="/test/public/" class="logo">
+        <span class="logo-mini"><b>S-cart</b></span>
+        <span class="logo-lg"><%= image_tag("Admin/img/scart-min.png", :alt => "img") %>
+        </span>
+      </a>
+      <!-- Header Navbar -->
+      <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+          <span class="sr-only">Toggle navigation</span>
+        </a>
+        <style>
+          .search-form {
+            width: 250px;
+            margin: 10px 0 0 20px;
+            border-radius: 3px;
+            float: left;
+          }
+
+          .search-form input[type="text"] {
+            color: #666;
+            border: 0;
+          }
+
+          .search-form .btn {
+            color: #999;
+            background-color: #fff;
+            border: 0;
+          }
+
+        </style>
+        <form action="https://demo.s-cart.org/system_admin/shop_order" method="get" class="search-form" pjax-container>
+          <div class="input-group input-group-sm ">
+            <input type="text" name="keyword" class="form-control" placeholder="Search order id, email, phone or name"> <span class="input-group-btn">
+            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+          </span> </div>
+        </form>
+        <!-- Navbar Right Menu -->
+        <%=render "view_admin/elements/NavbarRightMenu" %>
+      </nav>
+    </header>
+    <%=render "view_admin/elements/menu" %>
+    <div class="content-wrapper" id="pjax-container">
+      <section class="content-header">
+        <h1> Dashboard
+          <small> </small>
+        </h1>
+      </section>
+      <section class="content">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="small-box bg-aqua">
+              <div class="inner">
+                <h3>{{$countposts}}</h3>
+                <p>Post total</p>
+              </div>
+              <div class="icon"> <i class="fa fa-tags"></i> </div> <a href="{!! url('/api/admin_post/') !!}" class="small-box-footer">
+                                    More&nbsp;
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a> </div>
+          </div>
+          <div class="col-md-4">
+            <div class="small-box bg-green">
+              <div class="inner">
+                <h3>{{$countemployer}}</h3>
+                <p>Employer total</p>
+              </div>
+              <div class="icon"> <i class="fa fa-group"></i> </div> <a href="{!! url('/api/admin_employer/') !!}" class="small-box-footer">
+                                    More&nbsp;
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a> </div>
+          </div>
+          <div class="col-md-4">
+            <div class="small-box bg-yellow">
+              <div class="inner">
+                <h3>{{$countusers}}</h3>
+                <p>Candidate total</p>
+              </div>
+              <div class="icon"> <i class="fa fa-user"></i> </div> <a href="{!! url('/api/admin_candidate/') !!}" class="small-box-footer">
+                                    More&nbsp;
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </a> </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box">
+              <div class="box-header with-border">
+                <h3 class="box-title">In this month</h3>
+                <div class="box-tools pull-right"> </div>
+                <!-- /.box-tools -->
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body" style="display: block;">
+                <div class="box-body">
+                  <div class="row">
+                    <!-- /.col -->
+                    <canvas id="chart-days-in-month" width="700" height="200"></canvas>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <script>
+                  function format_number(n) {
+                    return n.toFixed(0).replace(/./g, function(c, i, a) {
+                      return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+                    });
+                  }
+                  $(document).ready(function($) {
+                    var ctx = document.getElementById('chart-days-in-month').getContext('2d');
+                    var chart = new Chart(ctx, {
+                      // The type of chart we want to create
+                      type: 'bar',
+                      // The data for our dataset
+                      data: {
+                        // type: 'category',
+                        labels: ["1/10", "2/10", "3/10", "4/10", "5/10", "6/10", "7/10", "8/10", "9/10", "10/10", "11/10", "12/10", "13/10", "14/10",
+                          "15/10", "16/10", "17/10", "18/10", "19/10", "20/10", "21/10", "22/10", "23/10"
+                        ],
+                        datasets: [{
+                          label: "Total amount",
+                          backgroundColor: 'rgba(225,0,0,0.4)',
+                          borderColor: "rgb(231, 53, 253)",
+                          borderCapStyle: 'square',
+                          pointHoverRadius: 8,
+                          pointHoverBackgroundColor: "yellow",
+                          pointHoverBorderColor: "brown",
+                          data: [0, 0, 0, 0, 30000, 30000, 60000, 120000, 190000, 190000, 190000, 190000, 190000, 190000, 190000, 190000, 435000,
+                            435000, 530000, 530000, 560000, 560000, 640000
+                          ],
+                          showLine: true, // disable for a single dataset,
+                          yAxisID: "y-axis-gravity",
+                          fill: false,
+                          type: 'line',
+                          lineTension: 0.1,
+                        }, {
+                          label: "Total order",
+                          backgroundColor: 'rgb(138, 199, 214)',
+                          borderColor: 'rgb(138, 199, 214)',
+                          pointHoverRadius: 8,
+                          pointHoverBackgroundColor: "brown",
+                          pointHoverBorderColor: "yellow",
+                          data: [0, 0, 0, 0, 1, 0, 1, 2, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 1, 0, 2],
+                          showLine: true, // disable for a single dataset,
+                          yAxisID: "y-axis-density",
+                          spanGaps: true,
+                          lineTension: 0.1,
+                        }, ]
+                      },
+                      // Configuration options go here
+                      options: {
+                        responsive: true,
+                        legend: {
+                          display: true,
+                        },
+                        layout: {
+                          padding: {
+                            left: 10,
+                            right: 10,
+                            top: 0,
+                            bottom: 0
+                          }
+                        },
+                        scales: {
+                          yAxes: [{
+                            position: "left",
+                            id: "y-axis-density",
+                            ticks: {
+                              beginAtZero: true,
+                              max: 2 + 5,
+                              min: 0,
+                              stepSize: 2,
+                            },
+                            scaleLabel: {
+                              display: true,
+                              labelString: 'Total order',
+                              fontSize: 15,
+                            }
+                          }, {
+                            position: "right",
+                            id: "y-axis-gravity",
+                            ticks: {
+                              beginAtZero: true,
+                              callback: function(label, index, labels) {
+                                return format_number(label);
+                              },
+                            },
+                            scaleLabel: {
+                              display: true,
+                              labelString: 'Total amount (VNĐ)',
+                              fontSize: 15
+                            }
+                          }]
+                        },
+                        tooltips: {
+                          callbacks: {
+                            label: function(tooltipItem, data) {
+                              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                              if (label) {
+                                label += ': ';
+                              }
+                              label += format_number(tooltipItem.yLabel);
+                              return label;
+                            }
+                          }
+                        }
+                      }
+                    });
+                  });
+
+                </script>
+              </div>
+              <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box">
+              <div class="box-header with-border">
+                <h3 class="box-title">In 12 months</h3>
+                <div class="box-tools pull-right"> </div>
+                <!-- /.box-tools -->
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body" style="display: block;">
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    <!-- /.col -->
+                    <canvas id="chartjs-1" width="600" height="150"></canvas>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                </div>
+                <script>
+                  function format_number(n) {
+                    return n.toFixed(0).replace(/./g, function(c, i, a) {
+                      return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+                    });
+                  }
+                  $(document).ready(function($) {
+                    var ctx = document.getElementById('chartjs-1').getContext('2d');
+                    var chart = new Chart(ctx, {
+                      // The type of chart we want to create
+                      type: 'bar',
+                      // The data for our dataset
+                      data: {
+                        "labels": ["10/2017", "11/2017", "12/2017", "01/2018", "02/2018", "03/2018", "04/2018", "05/2018", "06/2018", "07/2018", "08/2018",
+                          "09/2018", "10/2018"
+                        ],
+                        "datasets": [{
+                          "label": "Total amount",
+                          "data": [0, 0, 0, 0, 0, 0, 0, 1845000, 0, 0, 0, 1001000, 640000],
+                          "fill": false,
+                          "backgroundColor": ["rgba(191, 25, 232, 0.2)", "rgba(191, 25, 232, 0.2)", "rgba(191, 25, 232, 0.2)",
+                            "rgba(191, 25, 232, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)",
+                            "rgba(75, 192, 192, 0.2)", "rgba(54, 162, 235, 0.2)", "rgba(153, 102, 255, 0.2)", "rgba(201, 203, 207, 0.2)",
+                            "rgba(181, 147, 50, 0.2)", "rgba(232, 130, 81, 0.2)",
+                          ],
+                          "borderColor": ["rgb(191, 25, 232)", "rgb(191, 25, 232)", "rgb(191, 25, 232)", "rgb(191, 25, 232)", "rgb(255, 99, 132)",
+                            "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)",
+                            "rgb(201, 203, 207)", "rgb(181, 147, 50)", "rgb(232, 130, 81)",
+                          ],
+                          "borderWidth": 1,
+                          type: "bar",
+                        }, {
+                          "label": "Line total amount",
+                          "data": [0, 0, 0, 0, 0, 0, 0, 1845000, 0, 0, 0, 1001000, 640000],
+                          "fill": false,
+                          "backgroundColor": "red",
+                          "borderColor": "red",
+                          "borderWidth": 1,
+                          type: "line",
+                        }]
+                      },
+                      options: {
+                        responsive: true,
+                        legend: {
+                          display: true,
+                        },
+                        layout: {
+                          padding: {
+                            left: 10,
+                            right: 10,
+                            top: 0,
+                            bottom: 0
+                          }
+                        },
+                        tooltips: {
+                          callbacks: {
+                            label: function(tooltipItem, data) {
+                              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                              if (label) {
+                                label += ': ';
+                              }
+                              label += format_number(tooltipItem.yLabel);
+                              return label;
+                            }
+                          }
+                        },
+                        scales: {
+                          yAxes: [{
+                            position: "left",
+                            // id: "y-axis-amount",
+                            ticks: {
+                              beginAtZero: true,
+                              callback: function(label, index, labels) {
+                                return format_number(label);
+                              },
+                            },
+                            scaleLabel: {
+                              display: true,
+                              labelString: 'VNĐ',
+                              fontSize: 15
+                            }
+                          }]
+                        },
+                      },
+                    });
+                  });
+
+                </script>
+              </div>
+              <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box box-info box-solid">
+              <div class="box-header with-border">
+                <h3 class="box-title">New Candidate</h3>
+                <div class="box-tools pull-right"> </div>
+                <!-- /.box-tools -->
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body" style="display: block;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>CV</th>
+                      <th>Cover letter</th>
+                    </tr>
+                  </thead>
+                  <tbody> @foreach($users as $user)
+                    <tr>
+                      <td>{{$user-> id }}</td>
+                      <td>{{$user-> name }}</td>
+                      <td>{{$user-> CV }}</td>
+                      <td>{{$user-> cover_letter }}</td>
+                    </tr> @endforeach </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="box box-info box-solid">
+              <div class="box-header with-border">
+                <h3 class="box-title">New Employer</h3>
+                <div class="box-tools pull-right"> </div>
+                <!-- /.box-tools -->
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body" style="display: block;">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody> @foreach($employer as $employers)
+                    <tr>
+                      <td>{{$employers-> id }}</td>
+                      <td>{{$employers-> name }}</td>
+                      <td>{{$employers-> Description }}</td>
+                    </tr> @endforeach </tbody>
+                </table>
+              </div>
+              <!-- /.box-body -->
+            </div>
+          </div>
+        </div>
+    </div>
+    <script data-exec-on-popstate>
+      $(function() {});
+    </script>
+
+  </div>
+
+  <script>
+    function LA() {}
+    LA.token = "hRSRROpQ7LLnmzWtDmA0VqRjp4t0pxc0QEI0O2NK";
+
+  </script>
+</body>
+
+</html>
